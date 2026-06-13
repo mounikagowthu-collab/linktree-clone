@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Hub</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f1f5f9; color: #1e293b; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .container { width: 100%; max-width: 500px; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); text-align: center; }
+        
+        h1 { font-size: 28px; margin-bottom: 20px; color: #0f172a; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        
+        /* Tab Styling */
+        .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; }
+        .tab-btn { background: #e2e8f0; color: #64748b; border: none; padding: 8px 16px; font-weight: 600; border-radius: 8px; cursor: pointer; }
+        .tab-btn.active { background: #2563eb; color: white; }
+        
+        /* Input & Button Form */
+        .input-box { width: 100%; padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 15px; margin-bottom: 15px; outline: none; transition: border-color 0.2s; }
+        .input-box:focus { border-color: #2563eb; }
+        
+        .btn-generate { width: 100%; background: #2563eb; color: white; border: none; padding: 12px; font-size: 16px; font-weight: 600; border-radius: 8px; cursor: pointer; transition: background 0.2s; }
+        .btn-generate:hover { background: #1d4ed8; }
+        
+        /* QR Code Display Area */
+        .qr-display { margin-top: 25px; display: none; justify-content: center; align-items: center; flex-direction: column; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px dashed #cbd5e1; }
+        .qr-display img { max-width: 100%; height: auto; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .btn-download { background: #10b981; color: white; border: none; padding: 8px 16px; font-size: 14px; font-weight: 600; border-radius: 6px; cursor: pointer; text-decoration: none; }
+        .btn-download:hover { background: #059669; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>📊 QR Code Hub</h1>
+        
+        <div class="tabs">
+            <button class="tab-btn active">✨ Generator</button>
+            <button class="tab-btn">🔍 Scanner</button>
+        </div>
+
+        <input type="text" id="qr-input" class="input-box" placeholder="Enter Text or URL here...">
+        <button class="btn-generate" onclick="generateQR()">Generate QR Code</button>
+
+        <div id="qr-result" class="qr-display">
+            <img id="qr-image" src="" alt="QR Code">
+            <a id="download-link" class="btn-download" download="qrcode.png">Download QR Code 📥</a>
+        </div>
+    </div>
+
+    <script>
+        function generateQR() {
+            const qrInput = document.getElementById('qr-input').value.trim();
+            const qrResult = document.getElementById('qr-result');
+            const qrImage = document.getElementById('qr-image');
+            const downloadLink = document.getElementById('download-link');
+
+            // If input is empty, show alert
+            if (qrInput === '') {
+                alert('Please enter some text or a valid URL first!');
+                return;
+            }
+
+            // Using an extremely reliable global QR Generator service URL
+            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrInput)}`;
+            
+            // Set the image src to the API URL
+            qrImage.src = qrApiUrl;
+            
+            // Setup download link href
+            downloadLink.href = qrApiUrl;
+
+            // Make the QR container visible smoothly
+            qrResult.style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
